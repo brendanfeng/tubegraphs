@@ -1,10 +1,34 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState<number>(0);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(()=> {
+    getResponse();
+  })
+
+  const getResponse = async ()=> {
+    try {
+      //Fetch request
+      const response = await fetch('http://localhost:5000/', {
+        method: 'GET',
+        headers: {},
+      })
+      //Check response
+      if (!response.ok) {
+        throw new Error('Failed request');
+      }
+      const data = await response.json();
+      console.log(data);
+
+    } catch (error: any) {
+       setError(error.message);
+    }
+  }
 
   return (
     <>
